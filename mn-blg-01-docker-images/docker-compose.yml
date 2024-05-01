@@ -1,0 +1,42 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8080"
+    depends_on:
+      - pg-database
+    networks:
+      - backend-network
+      - frontend-network
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "5000:3000"
+    depends_on:
+      - backend
+    networks:
+      - frontend-network
+
+  pg-database:
+    image: postgres
+    restart: always
+    ports:
+      - "8001:5432"
+    environment:
+      POSTGRES_PASSWORD: databasepassword
+      POSTGRES_USER: databaseuser
+      POSTGRES_DB: users
+    networks:
+      - backend-network
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+ 
+volumes:
+  pgdata:
+
+networks:
+  backend-network:
+   name: backend_network
+  frontend-network:
+   name: frontend_network
