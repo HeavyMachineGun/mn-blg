@@ -1,6 +1,11 @@
 services:
   backend:
-    build: ./backend
+    build: 
+     context: ./backend
+#     args:
+#      ConnectionStrings__DefaultConnection: "Host=pg-database;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PW}"  
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=pg-database;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PW}"
     ports:
       - "8000:8080"
     depends_on:
@@ -10,9 +15,12 @@ services:
       - frontend-network
   
   frontend:
-    build: ./frontend
+    build: 
+     context: ./frontend
+    environment:
+      NEXT_PUBLIC_SERVICE_URL: "http://backend:8080"
     ports:
-      - "5000:3000"
+      - "5001:3000"
     depends_on:
       - backend
     networks:
@@ -24,9 +32,9 @@ services:
     ports:
       - "8001:5432"
     environment:
-      POSTGRES_PASSWORD: databasepassword
-      POSTGRES_USER: databaseuser
-      POSTGRES_DB: users
+      POSTGRES_PASSWORD: ${POSTGRES_PW}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
     networks:
       - backend-network
     volumes:

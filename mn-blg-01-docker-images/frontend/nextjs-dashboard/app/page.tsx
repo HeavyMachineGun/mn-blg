@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import { getUsers } from '@/app/lib/data';
 import { User } from './lib/definitions';
-import { use } from 'react';
 
-export default async function Page({users}: {users: User[]}) {
-  
+export default async function Page() {
+  var users = await getUsers();
   return (
     <main className="flex min-h-screen flex-col p-6">
    

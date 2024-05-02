@@ -2,8 +2,10 @@ import {User} from './definitions';
 
 export async function getUsers() {
   try {
-    
-    const users= (await fetch('http://backend:8080/user'));
+
+    const SERVICE_URL = process.env.NEXT_PUBLIC_SERVICE_URL;
+    console.warn('SERVICE_URL:', SERVICE_URL);
+    const users= (await fetch(`${SERVICE_URL}/api/user`));
     console.log(users);
     return (await users.json()) as User[];
   } catch (error) {
